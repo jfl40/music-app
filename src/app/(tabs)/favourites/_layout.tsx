@@ -1,5 +1,5 @@
-import { StackScreenWithSearchBar } from "@/src/constants/layout";
-import { defaultStyles } from "@/src/styles";
+import { StackScreenWithSearchBar } from "@/constants/layout";
+import { defaultStyles } from "@/styles";
 import { Stack } from "expo-router";
 import { View } from "react-native";
 

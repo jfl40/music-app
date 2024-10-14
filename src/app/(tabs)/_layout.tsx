@@ -1,4 +1,4 @@
-import { colours, fontSize } from "@/src/constants/tokens";
+import { colours, fontSize } from "@/constants/tokens";
 import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
 import { StyleSheet } from "react-native";

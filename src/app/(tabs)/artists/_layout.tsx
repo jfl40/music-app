@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import { View } from "react-native";
-import { defaultStyles } from "@/src/styles";
-import { StackScreenWithSearchBar } from "@/src/constants/layout";
+import { defaultStyles } from "@/styles";
+import { StackScreenWithSearchBar } from "@/constants/layout";
 
 export default function ArtistsScreenLayout() {
   return (
