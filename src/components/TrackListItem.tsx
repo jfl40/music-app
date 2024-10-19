@@ -3,9 +3,10 @@ import { colours, fontSize } from "@/constants/tokens";
 import { defaultStyles } from "@/styles";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { Image } from "expo-image";
+import { Track } from "react-native-track-player";
 
 export type TrackListItemProps = {
-  track: { title: string; image?: string; artist?: string };
+  track: Track;
 };
 
 const TracksListItem = ({ track }: TrackListItemProps) => {
@@ -17,7 +18,7 @@ const TracksListItem = ({ track }: TrackListItemProps) => {
         <View>
           <Image
             source={{
-              uri: track.image ?? unknownTrackImageUri,
+              uri: track.artwork ?? unknownTrackImageUri,
             }}
             style={{
               ...styles.trackArtworkImage,

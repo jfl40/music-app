@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { defaultStyles } from "@/styles";
 import TracksList from "@/components/TracksList";
 import { screenPadding } from "@/constants/tokens";
