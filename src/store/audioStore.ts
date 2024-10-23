@@ -34,7 +34,6 @@ const useAudioStore = create<AudioState>()((set, get) => ({
     const { sound: newSound } = await Audio.Sound.createAsync({
       uri: track.url,
     });
-    // console.log("Playing track: ", track);
 
     set({ sound: newSound, currentTrack: track, isPlaying: true });
     await newSound.playAsync();
@@ -77,7 +76,6 @@ const useAudioStore = create<AudioState>()((set, get) => ({
   },
 
   resumeTrack: async () => {
-    console.log("resuming track");
     const sound = get().sound;
     if (sound) {
       await sound.playAsync();
@@ -86,7 +84,6 @@ const useAudioStore = create<AudioState>()((set, get) => ({
   },
 
   pauseTrack: async () => {
-    console.log("pausing track");
     const sound = get().sound;
     if (sound) {
       await sound.pauseAsync();

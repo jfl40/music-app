@@ -1,4 +1,3 @@
-import { opacity } from "react-native-reanimated/lib/typescript/reanimated2/Colors";
 import { colours, fontSize } from "../constants/tokens";
 import { StyleSheet } from "react-native";
 
@@ -18,5 +17,18 @@ export const utilsStyles = StyleSheet.create({
     borderColor: colours.textMuted,
     borderWidth: StyleSheet.hairlineWidth,
     opacity: 0.3,
+  },
+  emptyContentText: {
+    ...defaultStyles.text,
+    color: colours.textMuted,
+    textAlign: "center",
+    marginTop: 20,
+  },
+  emptyContentImage: {
+    width: 200,
+    height: 200,
+    alignSelf: "center",
+    marginTop: 40,
+    opacity: 0.5,
   },
 });

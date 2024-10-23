@@ -5,7 +5,8 @@ import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { Image } from "expo-image";
 import { Track } from "react-native-track-player";
 import useAudioStore from "@/store/audioStore";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
+import { Wave } from "react-native-animated-spinkit";
 
 export type TrackListItemProps = {
   track: Track;
@@ -18,6 +19,7 @@ const TracksListItem = ({
 }: TrackListItemProps) => {
   const isActiveTrack =
     useAudioStore((state) => state.currentTrack?.url) === track.url;
+  const playing = useAudioStore((state) => state.isPlaying);
 
   return (
     <TouchableHighlight onPress={() => handleTrackSelect(track)}>
@@ -32,6 +34,22 @@ const TracksListItem = ({
               opacity: isActiveTrack ? 0.6 : 1,
             }}
           />
+
+          {isActiveTrack &&
+            (playing ? (
+              <Wave
+                style={styles.trackPlayIconIndicator}
+                color={colours.icon}
+                size={20}
+              />
+            ) : (
+              <Ionicons
+                style={styles.trackPausedIconIndicator}
+                name="play"
+                size={24}
+                color={colours.icon}
+              />
+            ))}
         </View>
 
         <View
@@ -72,6 +90,16 @@ const styles = StyleSheet.create({
     columnGap: 14,
     alignItems: "center",
     paddingRight: 20,
+  },
+  trackPlayIconIndicator: {
+    position: "absolute",
+    top: 14,
+    left: 14,
+  },
+  trackPausedIconIndicator: {
+    position: "absolute",
+    top: 14,
+    left: 14,
   },
   trackArtworkImage: {
     borderRadius: 8,

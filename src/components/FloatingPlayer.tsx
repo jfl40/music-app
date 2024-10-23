@@ -10,16 +10,13 @@ import {
   ViewProps,
 } from "react-native";
 import { PlayPauseButton, SkipToNextButton } from "@/components/PlayerControls";
-import { Track } from "react-native-track-player";
-import { useState } from "react";
+import { useLastActiveTrack } from "@/hooks/useLastActiveTrack";
+import { MovingText } from "./MovingText";
 
 export const FloatingPlayer = ({ style }: ViewProps) => {
   const activeTrack = useAudioStore((state) => state.currentTrack);
-  // const lastActiveTrack = useLastActiveTrack();
-
-  const displayedTrack: Track = activeTrack ?? {
-    title: "Unknown Track",
-  };
+  const lastActiveTrack = useLastActiveTrack();
+  const displayedTrack = activeTrack ?? lastActiveTrack;
   if (!displayedTrack) return null;
 
   return (
@@ -33,7 +30,11 @@ export const FloatingPlayer = ({ style }: ViewProps) => {
         />
 
         <View style={styles.trackTitleContainer}>
-          <Text style={styles.trackTitle}>{displayedTrack.title}</Text>
+          <MovingText
+            style={styles.trackTitle}
+            text={displayedTrack.title ?? ""}
+            animationThreshold={25}
+          />
         </View>
 
         <View style={styles.trackControlsContainer}>

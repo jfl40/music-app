@@ -15,7 +15,6 @@ type PlayerButtonsProps = {
 
 export const PlayPauseButton = ({ style, iconSize }: PlayerButtonsProps) => {
   const playing = useAudioStore((state) => state.isPlaying);
-  console.log(playing, "play pause button");
   const pause = useAudioStore.getState().pauseTrack;
   const play = useAudioStore.getState().resumeTrack;
 
@@ -24,7 +23,6 @@ export const PlayPauseButton = ({ style, iconSize }: PlayerButtonsProps) => {
       <TouchableOpacity
         activeOpacity={0.85}
         onPress={() => (playing ? pause() : play())}
-        // onPress={() => console.log("clicked pause/play")}
       >
         <FontAwesome
           name={playing ? "pause" : "play"}
