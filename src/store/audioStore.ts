@@ -1,12 +1,18 @@
 import { create } from "zustand";
 import { Audio, AVPlaybackStatus } from "expo-av";
+import { Track } from "react-native-track-player";
 
 interface AudioState {
   isPlaying: boolean;
   sound: Audio.Sound | null;
-  currentTrack: string | null;
+  currentTrack: Track | null;
+  queue: Track[];
+  currentTrackIndex: number;
 
-  playTrack: (url: string) => Promise<void>;
+  playTrack: (track: Track) => Promise<void>;
+  playQueue: (tracks: Track[], startIndex?: number) => Promise<void>;
+  nextTrack: () => Promise<void>;
+  previousTrack: () => Promise<void>;
   pauseTrack: () => Promise<void>;
   resumeTrack: () => Promise<void>;
   stopTrack: () => Promise<void>;
@@ -17,24 +23,62 @@ const useAudioStore = create<AudioState>()((set, get) => ({
   isPlaying: false,
   sound: null,
   currentTrack: null,
+  queue: [],
+  currentTrackIndex: 0,
 
-  playTrack: async (uri: string) => {
-    const { sound: currentSound } = get();
+  playTrack: async (track: Track) => {
+    const currentSound = get().sound;
     if (currentSound) {
       await currentSound.unloadAsync();
     }
-    const { sound: newSound } = await Audio.Sound.createAsync({ uri });
-    set({ sound: newSound, currentTrack: uri, isPlaying: true });
+    const { sound: newSound } = await Audio.Sound.createAsync({
+      uri: track.url,
+    });
+    // console.log("Playing track: ", track);
+
+    set({ sound: newSound, currentTrack: track, isPlaying: true });
+    await newSound.playAsync();
 
     newSound.setOnPlaybackStatusUpdate((status: AVPlaybackStatus) => {
       if (status.isLoaded && status.didJustFinish) {
-        set({ isPlaying: false });
+        get().nextTrack();
       }
     });
   },
 
+  playQueue: async (tracks: Track[], startIndex = 0) => {
+    set({ queue: tracks, currentTrackIndex: startIndex });
+    const trackToPlay = tracks[startIndex];
+    if (trackToPlay) {
+      await get().playTrack(trackToPlay);
+    }
+  },
+
+  nextTrack: async () => {
+    const queue = get().queue;
+    const nextIndex = get().currentTrackIndex + 1;
+
+    if (nextIndex < queue.length) {
+      set({ currentTrackIndex: nextIndex });
+      const nextTrack = queue[nextIndex];
+      await get().playTrack(nextTrack);
+    }
+  },
+
+  previousTrack: async () => {
+    const queue = get().queue;
+    const prevIndex = get().currentTrackIndex - 1;
+
+    if (prevIndex >= 0) {
+      set({ currentTrackIndex: prevIndex });
+      const prevTrack = queue[prevIndex];
+      await get().playTrack(prevTrack);
+    }
+  },
+
   resumeTrack: async () => {
-    const { sound } = get();
+    console.log("resuming track");
+    const sound = get().sound;
     if (sound) {
       await sound.playAsync();
       set({ isPlaying: true });
@@ -42,7 +86,8 @@ const useAudioStore = create<AudioState>()((set, get) => ({
   },
 
   pauseTrack: async () => {
-    const { sound } = get();
+    console.log("pausing track");
+    const sound = get().sound;
     if (sound) {
       await sound.pauseAsync();
       set({ isPlaying: false });

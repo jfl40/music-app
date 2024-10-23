@@ -4,16 +4,23 @@ import { defaultStyles } from "@/styles";
 import { StyleSheet, Text, TouchableHighlight, View } from "react-native";
 import { Image } from "expo-image";
 import { Track } from "react-native-track-player";
+import useAudioStore from "@/store/audioStore";
+import { Entypo } from "@expo/vector-icons";
 
 export type TrackListItemProps = {
   track: Track;
+  onTrackSelect: (track: Track) => void;
 };
 
-const TracksListItem = ({ track }: TrackListItemProps) => {
-  const isActiveTrack = false;
+const TracksListItem = ({
+  track,
+  onTrackSelect: handleTrackSelect,
+}: TrackListItemProps) => {
+  const isActiveTrack =
+    useAudioStore((state) => state.currentTrack?.url) === track.url;
 
   return (
-    <TouchableHighlight>
+    <TouchableHighlight onPress={() => handleTrackSelect(track)}>
       <View style={styles.trackItemContainer}>
         <View>
           <Image
@@ -26,21 +33,33 @@ const TracksListItem = ({ track }: TrackListItemProps) => {
             }}
           />
         </View>
-        <View style={{ width: "100%" }}>
-          <Text
-            numberOfLines={1}
-            style={{
-              ...styles.trackTitleText,
-              color: isActiveTrack ? colours.primary : colours.text,
-            }}
-          >
-            {track.title}
-          </Text>
-          {track.artist && (
-            <Text numberOfLines={1} style={styles.trackArtistText}>
-              {track.artist}
+
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <View style={{ width: "100%" }}>
+            <Text
+              numberOfLines={1}
+              style={{
+                ...styles.trackTitleText,
+                color: isActiveTrack ? colours.primary : colours.text,
+              }}
+            >
+              {track.title}
             </Text>
-          )}
+            {track.artist && (
+              <Text numberOfLines={1} style={styles.trackArtistText}>
+                {track.artist}
+              </Text>
+            )}
+          </View>
+
+          <Entypo name="dots-three-horizontal" size={18} color={colours.icon} />
         </View>
       </View>
     </TouchableHighlight>

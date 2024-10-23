@@ -3,8 +3,9 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { SplashScreen } from "expo-router";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import useAudioStore from "@/store/audioStore";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,8 +27,10 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
-      <RootNavigation />
-      <StatusBar style="auto" />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <RootNavigation />
+        <StatusBar style="auto" />
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 };
