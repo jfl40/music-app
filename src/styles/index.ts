@@ -13,6 +13,11 @@ export const defaultStyles = StyleSheet.create({
 });
 
 export const utilsStyles = StyleSheet.create({
+  centeredRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   itemSeparator: {
     borderColor: colours.textMuted,
     borderWidth: StyleSheet.hairlineWidth,

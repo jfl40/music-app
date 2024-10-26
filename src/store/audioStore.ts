@@ -8,6 +8,8 @@ interface AudioState {
   currentTrack: Track | null;
   queue: Track[];
   currentTrackIndex: number;
+  position: number;
+  duration: number;
 
   playTrack: (track: Track) => Promise<void>;
   playQueue: (tracks: Track[], startIndex?: number) => Promise<void>;
@@ -25,6 +27,8 @@ const useAudioStore = create<AudioState>()((set, get) => ({
   currentTrack: null,
   queue: [],
   currentTrackIndex: 0,
+  position: 0,
+  duration: 0,
 
   playTrack: async (track: Track) => {
     const currentSound = get().sound;
@@ -35,12 +39,16 @@ const useAudioStore = create<AudioState>()((set, get) => ({
       uri: track.url,
     });
 
-    set({ sound: newSound, currentTrack: track, isPlaying: true });
+    set({ sound: newSound, currentTrack: track });
     await newSound.playAsync();
+    set({ isPlaying: true });
 
     newSound.setOnPlaybackStatusUpdate((status: AVPlaybackStatus) => {
-      if (status.isLoaded && status.didJustFinish) {
-        get().nextTrack();
+      if (status.isLoaded) {
+        set({
+          position: status.positionMillis,
+          duration: status.durationMillis,
+        });
       }
     });
   },

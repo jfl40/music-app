@@ -1,7 +1,7 @@
 import { colours } from "@/constants/tokens";
 import useAudioStore from "@/store/audioStore";
 import { FontAwesome, FontAwesome6 } from "@expo/vector-icons";
-import { View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 type PlayerControlsProps = {
@@ -11,6 +11,20 @@ type PlayerControlsProps = {
 type PlayerButtonsProps = {
   style?: ViewStyle;
   iconSize?: number;
+};
+
+export const PlayerControls = ({ style }: PlayerControlsProps) => {
+  return (
+    <View style={[styles.container, style]}>
+      <View style={styles.row}>
+        <SkipToPrevButton />
+
+        <PlayPauseButton iconSize={30} />
+
+        <SkipToNextButton />
+      </View>
+    </View>
+  );
 };
 
 export const PlayPauseButton = ({ style, iconSize }: PlayerButtonsProps) => {
@@ -55,3 +69,14 @@ export const SkipToPrevButton = ({ iconSize = 30 }: PlayerButtonsProps) => {
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+  },
+});
