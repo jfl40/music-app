@@ -12,13 +12,15 @@ interface AudioState {
   duration: number;
 
   playTrack: (track: Track) => Promise<void>;
-  playQueue: (tracks: Track[], startIndex?: number) => Promise<void>;
+  playQueue: (startIndex?: number) => Promise<void>;
   nextTrack: () => Promise<void>;
   previousTrack: () => Promise<void>;
   pauseTrack: () => Promise<void>;
   resumeTrack: () => Promise<void>;
   stopTrack: () => Promise<void>;
   configureAudioMode: () => Promise<void>;
+  resetQueue: () => void;
+  addToQueue: (track: Track | Track[]) => void;
 }
 
 const useAudioStore = create<AudioState>()((set, get) => ({
@@ -50,12 +52,15 @@ const useAudioStore = create<AudioState>()((set, get) => ({
           duration: status.durationMillis,
         });
       }
+      if ("didJustFinish" in status && status.didJustFinish) {
+        get().nextTrack();
+      }
     });
   },
 
-  playQueue: async (tracks: Track[], startIndex = 0) => {
-    set({ queue: tracks, currentTrackIndex: startIndex });
-    const trackToPlay = tracks[startIndex];
+  playQueue: async (startIndex = 0) => {
+    set({ currentTrackIndex: startIndex });
+    const trackToPlay = get().queue[startIndex];
     if (trackToPlay) {
       await get().playTrack(trackToPlay);
     }
@@ -63,18 +68,17 @@ const useAudioStore = create<AudioState>()((set, get) => ({
 
   nextTrack: async () => {
     const queue = get().queue;
-    const nextIndex = get().currentTrackIndex + 1;
+    const nextIndex = (get().currentTrackIndex + 1) % queue.length;
 
-    if (nextIndex < queue.length) {
-      set({ currentTrackIndex: nextIndex });
-      const nextTrack = queue[nextIndex];
-      await get().playTrack(nextTrack);
-    }
+    set({ currentTrackIndex: nextIndex });
+    const nextTrack = queue[nextIndex];
+    await get().playTrack(nextTrack);
   },
 
   previousTrack: async () => {
     const queue = get().queue;
-    const prevIndex = get().currentTrackIndex - 1;
+    const prevIndex =
+      (get().currentTrackIndex - 1 + queue.length) % queue.length;
 
     if (prevIndex >= 0) {
       set({ currentTrackIndex: prevIndex });
@@ -116,6 +120,18 @@ const useAudioStore = create<AudioState>()((set, get) => ({
       });
     } catch (error) {
       console.error("Error configuring the audio player: ", error);
+    }
+  },
+
+  resetQueue: () => {
+    set({ queue: [], currentTrackIndex: 0 });
+  },
+
+  addToQueue: (track: Track | Track[]) => {
+    if (Array.isArray(track)) {
+      set({ queue: [...get().queue, ...track] });
+    } else {
+      set({ queue: [...get().queue, track] });
     }
   },
 }));

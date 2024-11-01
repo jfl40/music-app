@@ -6,6 +6,7 @@ import { useNavigationSearch } from "@/hooks/useNavigationSearch";
 import { useMemo } from "react";
 import { trackTitleFilter } from "@/helpers/filter";
 import { useTracks } from "@/store/library";
+import { generateTrackListId } from "@/helpers/miscellaneous";
 
 export default function SongScreen() {
   const search = useNavigationSearch({
@@ -28,7 +29,11 @@ export default function SongScreen() {
         contentInsetAdjustmentBehavior="automatic"
         style={{ paddingHorizontal: screenPadding.horizontal }}
       >
-        <TracksList tracks={filteredTracks} scrollEnabled={false} />
+        <TracksList
+          id={generateTrackListId("songs", search)}
+          tracks={filteredTracks}
+          scrollEnabled={false}
+        />
       </ScrollView>
     </View>
   );

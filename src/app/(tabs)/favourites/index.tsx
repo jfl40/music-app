@@ -6,6 +6,7 @@ import { useMemo } from "react";
 import { useNavigationSearch } from "@/hooks/useNavigationSearch";
 import { useFavourites } from "@/store/library";
 import { trackTitleFilter } from "@/helpers/filter";
+import { generateTrackListId } from "@/helpers/miscellaneous";
 
 const FavouritesScreen = () => {
   const search = useNavigationSearch({
@@ -26,7 +27,11 @@ const FavouritesScreen = () => {
         style={{ paddingHorizontal: screenPadding.horizontal }}
         contentInsetAdjustmentBehavior="automatic"
       >
-        <TracksList scrollEnabled={false} tracks={filteredFavouriteTracks} />
+        <TracksList
+          id={generateTrackListId("favourites", search)}
+          scrollEnabled={false}
+          tracks={filteredFavouriteTracks}
+        />
       </ScrollView>
     </View>
   );
