@@ -7,6 +7,7 @@ import { Image } from "expo-image";
 import { unknownTrackImageUri } from "@/constants/images";
 import { useQueue } from "@/store/queueStore";
 import { useRef } from "react";
+import { QueueControls } from "./QueueControls";
 
 export type TracksListProps = Partial<FlatListProps<Track>> & {
   id: string;
@@ -61,6 +62,9 @@ const TracksList = ({ id, tracks, ...FlatListProps }: TracksListProps) => {
     <FlatList
       data={tracks}
       contentContainerStyle={{ paddingTop: 10, paddingBottom: 128 }}
+      ListHeaderComponent={
+        <QueueControls tracks={tracks} style={{ paddingBottom: 20 }} />
+      }
       ListFooterComponent={ItemDivider}
       ItemSeparatorComponent={ItemDivider}
       ListEmptyComponent={
