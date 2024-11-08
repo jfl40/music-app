@@ -1,4 +1,4 @@
-import { TrackWithPlaylist } from "@/helpers/types";
+import { Artist, TrackWithPlaylist } from "@/helpers/types";
 import { create } from "zustand";
 import library from "@/assets/data/library.json";
 import { Track } from "react-native-track-player";
@@ -32,16 +32,22 @@ export const useFavourites = () => {
   return { favourites, toggleTrackFavourite };
 };
 
-// export const useFavourites = () => {
-//   const favourites = useLibraryStore((state) =>
-//     state.tracks.filter((track) => track.rating === 1)
-//   );
-//   const toggleTrackFavourite = useLibraryStore(
-//     (state) => state.toggleTrackFavourite
-//   );
+export const useArtists = () => {
+  const tracks = useLibraryStore((state) => state.tracks);
 
-//   return {
-//     favourites,
-//     toggleTrackFavourite,
-//   };
-// };
+  return useMemo(() => {
+    return tracks.reduce((acc, track) => {
+      const existingArtist = acc.find((artist) => artist.name === track.artist);
+      if (existingArtist) {
+        existingArtist.tracks.push(track);
+      } else {
+        acc.push({
+          name: track.artist ?? "Unknown",
+          tracks: [track],
+        });
+      }
+
+      return acc;
+    }, [] as Artist[]);
+  }, [tracks]);
+};

@@ -12,6 +12,7 @@ import { QueueControls } from "./QueueControls";
 export type TracksListProps = Partial<FlatListProps<Track>> & {
   id: string;
   tracks: Track[];
+  hideQueueControls?: boolean;
 };
 
 const ItemDivider = () => (
@@ -20,7 +21,12 @@ const ItemDivider = () => (
   />
 );
 
-const TracksList = ({ id, tracks, ...FlatListProps }: TracksListProps) => {
+const TracksList = ({
+  id,
+  tracks,
+  hideQueueControls = false,
+  ...FlatListProps
+}: TracksListProps) => {
   const queueOffset = useRef(0);
   const resetQueue = useAudioStore((state) => state.resetQueue);
   const addQueue = useAudioStore((state) => state.addToQueue);
@@ -63,7 +69,9 @@ const TracksList = ({ id, tracks, ...FlatListProps }: TracksListProps) => {
       data={tracks}
       contentContainerStyle={{ paddingTop: 10, paddingBottom: 128 }}
       ListHeaderComponent={
-        <QueueControls tracks={tracks} style={{ paddingBottom: 20 }} />
+        !hideQueueControls ? (
+          <QueueControls tracks={tracks} style={{ paddingBottom: 20 }} />
+        ) : undefined
       }
       ListFooterComponent={ItemDivider}
       ItemSeparatorComponent={ItemDivider}
