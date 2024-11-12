@@ -21,6 +21,7 @@ interface AudioState {
   configureAudioMode: () => Promise<void>;
   resetQueue: () => void;
   addToQueue: (track: Track | Track[]) => void;
+  removeFromQueue: (index: number) => void;
 }
 
 const useAudioStore = create<AudioState>()((set, get) => ({
@@ -132,6 +133,19 @@ const useAudioStore = create<AudioState>()((set, get) => ({
       set({ queue: [...get().queue, ...track] });
     } else {
       set({ queue: [...get().queue, track] });
+    }
+  },
+
+  removeFromQueue: (index: number) => {
+    set((state) => ({
+      queue: state.queue.filter((_, i) => i !== index),
+    }));
+
+    // Adjust currentTrackIndex if needed
+    if (get().currentTrackIndex >= index) {
+      set((state) => ({
+        currentTrackIndex: Math.max(0, state.currentTrackIndex - 1),
+      }));
     }
   },
 }));

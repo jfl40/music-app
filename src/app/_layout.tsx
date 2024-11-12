@@ -1,4 +1,3 @@
-// import { useSetupTrackPlayer } from "@/hooks/useSetupTrackPlayer";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -6,18 +5,11 @@ import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import useAudioStore from "@/store/audioStore";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PaperProvider } from "react-native-paper";
 
 SplashScreen.preventAutoHideAsync();
 
 const App = () => {
-  // const handleTrackPlayerLoaded = useCallback(() => {
-  //   SplashScreen.hideAsync();
-  // }, []);
-
-  // useSetupTrackPlayer({
-  //   onLoad: handleTrackPlayerLoaded,
-  // });
-
   const { configureAudioMode } = useAudioStore();
 
   useEffect(() => {
@@ -26,12 +18,14 @@ const App = () => {
   }, [configureAudioMode]);
 
   return (
-    <SafeAreaProvider>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <RootNavigation />
-        <StatusBar style="auto" />
-      </GestureHandlerRootView>
-    </SafeAreaProvider>
+    <PaperProvider>
+      <SafeAreaProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <RootNavigation />
+          <StatusBar style="auto" />
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
+    </PaperProvider>
   );
 };
 

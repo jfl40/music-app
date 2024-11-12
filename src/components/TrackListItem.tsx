@@ -7,6 +7,7 @@ import { Track } from "react-native-track-player";
 import useAudioStore from "@/store/audioStore";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { Wave } from "react-native-animated-spinkit";
+import { TrackShortcutsMenu } from "./TrackShortcutsMenu";
 
 export type TrackListItemProps = {
   track: Track;
@@ -77,7 +78,13 @@ const TracksListItem = ({
             )}
           </View>
 
-          <Entypo name="dots-three-horizontal" size={18} color={colours.icon} />
+          <TrackShortcutsMenu track={track}>
+            <Entypo
+              name="dots-three-horizontal"
+              size={18}
+              color={colours.icon}
+            />
+          </TrackShortcutsMenu>
         </View>
       </View>
     </TouchableHighlight>

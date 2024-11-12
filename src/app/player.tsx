@@ -4,7 +4,6 @@ import { PlayerProgressBar } from "@/components/PlayerProgressBar";
 import { PlayerVolumeBar } from "@/components/PlayerVolumeBar";
 import { unknownTrackImageUri } from "@/constants/images";
 import { colours, fontSize, screenPadding } from "@/constants/tokens";
-// import { usePlayerBackground } from "@/hooks/usePlayerBackground";
 import useAudioStore from "@/store/audioStore";
 import { defaultStyles } from "@/styles";
 import { FontAwesome } from "@expo/vector-icons";
@@ -12,21 +11,15 @@ import { Image } from "expo-image";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTrackPlayerFavourite } from "@/hooks/useTrackPlayerFavourite";
 
 const PlayerScreen = () => {
   const activeTrack = useAudioStore((state) => state.currentTrack);
-  // const imageColors = usePlayerBackground(
-  //   activeTrack?.artwork ?? unknownTrackImageUri
-  // );
   const imageColors = null;
 
   const { top, bottom } = useSafeAreaInsets();
 
-  const isFavourite = false;
-
-  const toggleFavourite = () => {
-    // TODO
-  };
+  const { isFavourite, toggleFavourite } = useTrackPlayerFavourite();
 
   if (!activeTrack) {
     return (

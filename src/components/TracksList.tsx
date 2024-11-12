@@ -32,6 +32,7 @@ const TracksList = ({
   const addQueue = useAudioStore((state) => state.addToQueue);
   const playQueue = useAudioStore((state) => state.playQueue);
   const { activeQueueId, setActiveQueueId } = useQueue();
+
   const handleTrackSelect = async (selectedTrack: Track) => {
     const trackIndex = tracks.findIndex(
       (track) => selectedTrack.url === track.url
