@@ -51,11 +51,13 @@ export const TrackShortcutsMenu = ({
       })
       .with("add-to-playlist", () => {
         router.push({
-          pathname: "(modals)/addToPlaylist",
+          pathname: "/(modals)/addToPlaylist",
           params: { trackUrl: track.url },
         });
       })
       .otherwise(() => console.warn(`Unknown menu action ${id}`));
+
+    closeMenu();
   };
 
   return (
